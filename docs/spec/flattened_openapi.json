@@ -3068,6 +3068,7 @@
     "/storage" : {
       "get" : {
         "tags" : [ "Storage" ],
+        "summary" : "List storage accounts managed by the specified key vault.",
         "description" : "List storage accounts managed by the specified key vault. This operation requires the storage/list permission.",
         "operationId" : "GetStorageAccounts",
         "parameters" : [ {
@@ -3399,6 +3400,7 @@
     "/storage/{storage-account-name}" : {
       "get" : {
         "tags" : [ "Storage" ],
+        "summary" : "Gets information about a specified storage account.",
         "description" : "Gets information about a specified storage account. This operation requires the storage/get permission.",
         "operationId" : "GetStorageAccount",
         "parameters" : [ {
@@ -3443,6 +3445,7 @@
       },
       "put" : {
         "tags" : [ "Storage" ],
+        "summary" : "Creates or updates a new storage account.",
         "description" : "Creates or updates a new storage account. This operation requires the storage/set permission.",
         "operationId" : "SetStorageAccount",
         "parameters" : [ {
@@ -3500,6 +3503,7 @@
       },
       "delete" : {
         "tags" : [ "Storage" ],
+        "summary" : "Deletes a storage account.",
         "description" : "Deletes a storage account. This operation requires the storage/delete permission.",
         "operationId" : "DeleteStorageAccount",
         "parameters" : [ {
@@ -3544,6 +3548,7 @@
       },
       "patch" : {
         "tags" : [ "Storage" ],
+        "summary" : "Updates the specified attributes associated with the given storage account.",
         "description" : "Updates the specified attributes associated with the given storage account. This operation requires the storage/set/update permission.",
         "operationId" : "UpdateStorageAccount",
         "parameters" : [ {
@@ -3603,6 +3608,7 @@
     "/storage/{storage-account-name}/regeneratekey" : {
       "post" : {
         "tags" : [ "Storage" ],
+        "summary" : "Regenerates the specified key value for the given storage account.",
         "description" : "Regenerates the specified key value for the given storage account. This operation requires the storage/regeneratekey permission.",
         "operationId" : "RegenerateStorageAccountKey",
         "parameters" : [ {
@@ -3662,6 +3668,7 @@
     "/storage/{storage-account-name}/sas" : {
       "get" : {
         "tags" : [ "Storage" ],
+        "summary" : "List storage SAS definitions for the given storage account.",
         "description" : "List storage SAS definitions for the given storage account. This operation requires the storage/listsas permission.",
         "operationId" : "GetSasDefinitions",
         "parameters" : [ {
@@ -3893,6 +3900,7 @@
     "/storage/{storage-account-name}/sas/{sas-definition-name}" : {
       "get" : {
         "tags" : [ "Storage" ],
+        "summary" : "Gets information about a SAS definition for the specified storage account.",
         "description" : "Gets information about a SAS definition for the specified storage account. This operation requires the storage/getsas permission.",
         "operationId" : "GetSasDefinition",
         "parameters" : [ {
@@ -3946,6 +3954,7 @@
       },
       "put" : {
         "tags" : [ "Storage" ],
+        "summary" : "Creates or updates a new SAS definition for the specified storage account.",
         "description" : "Creates or updates a new SAS definition for the specified storage account. This operation requires the storage/setsas permission.",
         "operationId" : "SetSasDefinition",
         "parameters" : [ {
@@ -4012,6 +4021,7 @@
       },
       "delete" : {
         "tags" : [ "Storage" ],
+        "summary" : "Deletes a SAS definition from a specified storage account.",
         "description" : "Deletes a SAS definition from a specified storage account. This operation requires the storage/deletesas permission.",
         "operationId" : "DeleteSasDefinition",
         "parameters" : [ {
@@ -4065,6 +4075,7 @@
       },
       "patch" : {
         "tags" : [ "Storage" ],
+        "summary" : "Updates the specified attributes associated with the given SAS definition.",
         "description" : "Updates the specified attributes associated with the given SAS definition. This operation requires the storage/setsas permission.",
         "operationId" : "UpdateSasDefinition",
         "parameters" : [ {
@@ -4201,6 +4212,7 @@
           },
           "key_ops" : {
             "type" : "array",
+            "description" : "Supported key operations.",
             "items" : {
               "type" : "string",
               "description" : "Supported key operations."
@@ -4296,32 +4308,42 @@
         "description" : "As of http://tools.ietf.org/html/draft-ietf-jose-json-web-key-18"
       },
       "KeyAttributes" : {
-        "properties" : {
-          "recoveryLevel" : {
-            "type" : "string",
-            "description" : "Reflects the deletion recovery level currently in effect for keys in the current vault. If it contains 'Purgeable' the key can be permanently deleted by a privileged user; otherwise, only the system can purge the key, at the end of the retention interval.",
-            "nullable" : false,
-            "readOnly" : true,
-            "enum" : [ "Purgeable", "Recoverable+Purgeable", "Recoverable", "Recoverable+ProtectedSubscription" ],
-            "x-ms-enum" : {
-              "name" : "DeletionRecoveryLevel",
-              "modelAsString" : true
-            }
-          }
-        },
         "description" : "The attributes of a key managed by the key vault service.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/Attributes"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryLevel" : {
+              "type" : "string",
+              "description" : "Reflects the deletion recovery level currently in effect for keys in the current vault. If it contains 'Purgeable' the key can be permanently deleted by a privileged user; otherwise, only the system can purge the key, at the end of the retention interval.",
+              "nullable" : false,
+              "readOnly" : true,
+              "enum" : [ "Purgeable", "Recoverable+Purgeable", "Recoverable", "Recoverable+ProtectedSubscription" ],
+              "x-ms-enum" : {
+                "name" : "DeletionRecoveryLevel",
+                "modelAsString" : true
+              }
+            }
+          }
         } ]
       },
       "KeyBundle" : {
         "type" : "object",
         "properties" : {
           "key" : {
-            "$ref" : "#/components/schemas/JsonWebKey"
+            "type" : "object",
+            "description" : "The Json web key.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/JsonWebKey"
+            } ]
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/KeyAttributes"
+            "type" : "object",
+            "description" : "The key management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/KeyAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -4346,7 +4368,11 @@
             "description" : "Key identifier."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/KeyAttributes"
+            "type" : "object",
+            "description" : "The key management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/KeyAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -4364,51 +4390,55 @@
         "description" : "The key item containing key metadata."
       },
       "DeletedKeyBundle" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted key."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the key is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the key was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "A DeletedKeyBundle consisting of a WebKey plus its Attributes and deletion info",
         "allOf" : [ {
           "$ref" : "#/components/schemas/KeyBundle"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted key."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the key is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the key was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "DeletedKeyItem" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted key."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the key is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the key was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "The deleted key item containing the deleted key metadata and information about deletion.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/KeyItem"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted key."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the key is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the key was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "SecretBundle" : {
@@ -4427,7 +4457,11 @@
             "description" : "The content type of the secret."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SecretAttributes"
+            "type" : "object",
+            "description" : "The secret management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SecretAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -4457,7 +4491,11 @@
             "description" : "Secret identifier."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SecretAttributes"
+            "type" : "object",
+            "description" : "The secret management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SecretAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -4479,70 +4517,76 @@
         "description" : "The secret item containing secret metadata."
       },
       "DeletedSecretBundle" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted secret."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the secret is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the secret was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "A Deleted Secret consisting of its previous id, attributes and its tags, as well as information on when it will be purged.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/SecretBundle"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted secret."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the secret is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the secret was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "DeletedSecretItem" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted secret."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the secret is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the secret was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "The deleted secret item containing metadata about the deleted secret.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/SecretItem"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted secret."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the secret is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the secret was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "SecretAttributes" : {
-        "properties" : {
-          "recoveryLevel" : {
-            "type" : "string",
-            "description" : "Reflects the deletion recovery level currently in effect for secrets in the current vault. If it contains 'Purgeable', the secret can be permanently deleted by a privileged user; otherwise, only the system can purge the secret, at the end of the retention interval.",
-            "nullable" : false,
-            "readOnly" : true,
-            "enum" : [ "Purgeable", "Recoverable+Purgeable", "Recoverable", "Recoverable+ProtectedSubscription" ],
-            "x-ms-enum" : {
-              "name" : "DeletionRecoveryLevel",
-              "modelAsString" : true
-            }
-          }
-        },
         "description" : "The secret management attributes.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/Attributes"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryLevel" : {
+              "type" : "string",
+              "description" : "Reflects the deletion recovery level currently in effect for secrets in the current vault. If it contains 'Purgeable', the secret can be permanently deleted by a privileged user; otherwise, only the system can purge the secret, at the end of the retention interval.",
+              "nullable" : false,
+              "readOnly" : true,
+              "enum" : [ "Purgeable", "Recoverable+Purgeable", "Recoverable", "Recoverable+ProtectedSubscription" ],
+              "x-ms-enum" : {
+                "name" : "DeletionRecoveryLevel",
+                "modelAsString" : true
+              }
+            }
+          }
         } ]
       },
       "SecretRestoreParameters" : {
@@ -4572,22 +4616,24 @@
         "description" : "The secret restore parameters."
       },
       "CertificateAttributes" : {
-        "properties" : {
-          "recoveryLevel" : {
-            "type" : "string",
-            "description" : "Reflects the deletion recovery level currently in effect for certificates in the current vault. If it contains 'Purgeable', the certificate can be permanently deleted by a privileged user; otherwise, only the system can purge the certificate, at the end of the retention interval.",
-            "nullable" : false,
-            "readOnly" : true,
-            "enum" : [ "Purgeable", "Recoverable+Purgeable", "Recoverable", "Recoverable+ProtectedSubscription" ],
-            "x-ms-enum" : {
-              "name" : "DeletionRecoveryLevel",
-              "modelAsString" : true
-            }
-          }
-        },
         "description" : "The certificate management attributes.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/Attributes"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryLevel" : {
+              "type" : "string",
+              "description" : "Reflects the deletion recovery level currently in effect for certificates in the current vault. If it contains 'Purgeable', the certificate can be permanently deleted by a privileged user; otherwise, only the system can purge the certificate, at the end of the retention interval.",
+              "nullable" : false,
+              "readOnly" : true,
+              "enum" : [ "Purgeable", "Recoverable+Purgeable", "Recoverable", "Recoverable+ProtectedSubscription" ],
+              "x-ms-enum" : {
+                "name" : "DeletionRecoveryLevel",
+                "modelAsString" : true
+              }
+            }
+          }
         } ]
       },
       "CertificateItem" : {
@@ -4598,7 +4644,11 @@
             "description" : "Certificate identifier."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/CertificateAttributes"
+            "type" : "object",
+            "description" : "The certificate management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificateAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -4656,7 +4706,11 @@
             "x-ms-client-name" : "X509Thumbprint"
           },
           "policy" : {
-            "$ref" : "#/components/schemas/CertificatePolicy"
+            "type" : "object",
+            "description" : "The management policy.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificatePolicy"
+            } ]
           },
           "cer" : {
             "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
@@ -4669,7 +4723,11 @@
             "description" : "The content type of the secret."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/CertificateAttributes"
+            "type" : "object",
+            "description" : "The certificate attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificateAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -4682,51 +4740,55 @@
         "description" : "A certificate bundle consists of a certificate (X509) plus its attributes."
       },
       "DeletedCertificateBundle" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted certificate."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the certificate is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the certificate was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "A Deleted Certificate consisting of its previous id, attributes and its tags, as well as information on when it will be purged.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/CertificateBundle"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted certificate."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the certificate is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the certificate was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "DeletedCertificateItem" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted certificate."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the certificate is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the certificate was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "The deleted certificate item containing metadata about the deleted certificate.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/CertificateItem"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted certificate."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the certificate is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the certificate was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "CertificateOperation" : {
@@ -4738,7 +4800,12 @@
             "readOnly" : true
           },
           "issuer" : {
-            "$ref" : "#/components/schemas/IssuerParameters"
+            "type" : "object",
+            "description" : "Parameters for the issuer of the X509 component of a certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerParameters"
+            } ],
+            "x-ms-client-name" : "IssuerParameters"
           },
           "csr" : {
             "pattern" : "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
@@ -4759,7 +4826,11 @@
             "description" : "The status details of the certificate operation."
           },
           "error" : {
-            "$ref" : "#/components/schemas/Error"
+            "type" : "object",
+            "description" : "Error encountered, if any, during the certificate operation.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/Error"
+            } ]
           },
           "target" : {
             "type" : "string",
@@ -4781,13 +4852,28 @@
             "readOnly" : true
           },
           "key_props" : {
-            "$ref" : "#/components/schemas/KeyProperties"
+            "type" : "object",
+            "description" : "Properties of the key backing a certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/KeyProperties"
+            } ],
+            "x-ms-client-name" : "KeyProperties"
           },
           "secret_props" : {
-            "$ref" : "#/components/schemas/SecretProperties"
+            "type" : "object",
+            "description" : "Properties of the secret backing a certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SecretProperties"
+            } ],
+            "x-ms-client-name" : "SecretProperties"
           },
           "x509_props" : {
-            "$ref" : "#/components/schemas/X509CertificateProperties"
+            "type" : "object",
+            "description" : "Properties of the X509 component of a certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/X509CertificateProperties"
+            } ],
+            "x-ms-client-name" : "X509CertificateProperties"
           },
           "lifetime_actions" : {
             "type" : "array",
@@ -4797,10 +4883,19 @@
             }
           },
           "issuer" : {
-            "$ref" : "#/components/schemas/IssuerParameters"
+            "type" : "object",
+            "description" : "Parameters for the issuer of the X509 component of a certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerParameters"
+            } ],
+            "x-ms-client-name" : "IssuerParameters"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/CertificateAttributes"
+            "type" : "object",
+            "description" : "The certificate attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificateAttributes"
+            } ]
           }
         },
         "description" : "Management policy for a certificate."
@@ -4869,7 +4964,12 @@
             }
           },
           "sans" : {
-            "$ref" : "#/components/schemas/SubjectAlternativeNames"
+            "type" : "object",
+            "description" : "The subject alternative names.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SubjectAlternativeNames"
+            } ],
+            "x-ms-client-name" : "SubjectAlternativeNames"
           },
           "key_usage" : {
             "type" : "array",
@@ -4917,10 +5017,18 @@
         "type" : "object",
         "properties" : {
           "trigger" : {
-            "$ref" : "#/components/schemas/Trigger"
+            "type" : "object",
+            "description" : "The condition that will execute the action.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/Trigger"
+            } ]
           },
           "action" : {
-            "$ref" : "#/components/schemas/Action"
+            "type" : "object",
+            "description" : "The action that will be executed.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/Action"
+            } ]
           }
         },
         "description" : "Action and its trigger that will be performed by Key Vault over the lifetime of a certificate."
@@ -4998,13 +5106,26 @@
             "description" : "The issuer provider."
           },
           "credentials" : {
-            "$ref" : "#/components/schemas/IssuerCredentials"
+            "type" : "object",
+            "description" : "The credentials to be used for the issuer.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerCredentials"
+            } ]
           },
           "org_details" : {
-            "$ref" : "#/components/schemas/OrganizationDetails"
+            "type" : "object",
+            "description" : "Details of the organization as provided to the issuer.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/OrganizationDetails"
+            } ],
+            "x-ms-client-name" : "OrganizationDetails"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/IssuerAttributes"
+            "type" : "object",
+            "description" : "Attributes of the issuer object.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerAttributes"
+            } ]
           }
         },
         "description" : "The issuer for Key Vault certificate."
@@ -5072,7 +5193,7 @@
           },
           "last_name" : {
             "type" : "string",
-            "description" : "Last name."
+            "description" : "Last name of the administrator."
           },
           "email" : {
             "type" : "string",
@@ -5115,7 +5236,7 @@
           },
           "name" : {
             "type" : "string",
-            "description" : "Name."
+            "description" : "Name of the contact."
           },
           "phone" : {
             "type" : "string",
@@ -5145,6 +5266,7 @@
           },
           "key_ops" : {
             "type" : "array",
+            "description" : "JSON web key operations permitted on the key.",
             "items" : {
               "type" : "string",
               "description" : "JSON web key operations. For more information, see JsonWebKeyOperation.",
@@ -5156,7 +5278,12 @@
             }
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/KeyAttributes"
+            "type" : "object",
+            "description" : "The attributes of the key to create.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/KeyAttributes"
+            } ],
+            "x-ms-client-name" : "keyAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5187,10 +5314,19 @@
             "description" : "Whether to import as a hardware key (HSM) or software key."
           },
           "key" : {
-            "$ref" : "#/components/schemas/JsonWebKey"
+            "type" : "object",
+            "description" : "The Json web key",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/JsonWebKey"
+            } ]
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/KeyAttributes"
+            "type" : "object",
+            "description" : "The key management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/KeyAttributes"
+            } ],
+            "x-ms-client-name" : "keyAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5219,6 +5355,7 @@
           },
           "value" : {
             "type" : "string",
+            "description" : "The data to be encrypted, decrypted, wrapped or unwrapped, as a base64url-encoded value.",
             "format" : "base64url"
           }
         },
@@ -5275,6 +5412,7 @@
           },
           "value" : {
             "type" : "string",
+            "description" : "The digest to be signed, as a base64url-encoded value.",
             "format" : "base64url"
           }
         },
@@ -5325,7 +5463,12 @@
             }
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/KeyAttributes"
+            "type" : "object",
+            "description" : "The attributes of the key to update.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/KeyAttributes"
+            } ],
+            "x-ms-client-name" : "keyAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5370,7 +5513,12 @@
             "description" : "Type of the secret value such as a password."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SecretAttributes"
+            "type" : "object",
+            "description" : "The secret management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SecretAttributes"
+            } ],
+            "x-ms-client-name" : "secretAttributes"
           }
         },
         "description" : "The secret set parameters."
@@ -5383,7 +5531,12 @@
             "description" : "Type of the secret value such as a password."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SecretAttributes"
+            "type" : "object",
+            "description" : "The secret management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SecretAttributes"
+            } ],
+            "x-ms-client-name" : "secretAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5399,10 +5552,20 @@
         "type" : "object",
         "properties" : {
           "policy" : {
-            "$ref" : "#/components/schemas/CertificatePolicy"
+            "type" : "object",
+            "description" : "The management policy for the certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificatePolicy"
+            } ],
+            "x-ms-client-name" : "CertificatePolicy"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/CertificateAttributes"
+            "type" : "object",
+            "description" : "The attributes of the certificate (optional).",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificateAttributes"
+            } ],
+            "x-ms-client-name" : "CertificateAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5429,10 +5592,20 @@
             "x-ms-client-name" : "password"
           },
           "policy" : {
-            "$ref" : "#/components/schemas/CertificatePolicy"
+            "type" : "object",
+            "description" : "The management policy for the certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificatePolicy"
+            } ],
+            "x-ms-client-name" : "CertificatePolicy"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/CertificateAttributes"
+            "type" : "object",
+            "description" : "The attributes of the certificate (optional).",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificateAttributes"
+            } ],
+            "x-ms-client-name" : "CertificateAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5448,10 +5621,20 @@
         "type" : "object",
         "properties" : {
           "policy" : {
-            "$ref" : "#/components/schemas/CertificatePolicy"
+            "type" : "object",
+            "description" : "The management policy for the certificate.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificatePolicy"
+            } ],
+            "x-ms-client-name" : "CertificatePolicy"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/CertificateAttributes"
+            "type" : "object",
+            "description" : "The attributes of the certificate (optional).",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificateAttributes"
+            } ],
+            "x-ms-client-name" : "CertificateAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5478,7 +5661,12 @@
             "x-ms-client-name" : "x509Certificates"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/CertificateAttributes"
+            "type" : "object",
+            "description" : "The attributes of the certificate (optional).",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/CertificateAttributes"
+            } ],
+            "x-ms-client-name" : "CertificateAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5499,13 +5687,26 @@
             "description" : "The issuer provider."
           },
           "credentials" : {
-            "$ref" : "#/components/schemas/IssuerCredentials"
+            "type" : "object",
+            "description" : "The credentials to be used for the issuer.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerCredentials"
+            } ]
           },
           "org_details" : {
-            "$ref" : "#/components/schemas/OrganizationDetails"
+            "type" : "object",
+            "description" : "Details of the organization as provided to the issuer.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/OrganizationDetails"
+            } ],
+            "x-ms-client-name" : "OrganizationDetails"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/IssuerAttributes"
+            "type" : "object",
+            "description" : "Attributes of the issuer object.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerAttributes"
+            } ]
           }
         },
         "description" : "The certificate issuer set parameters."
@@ -5518,13 +5719,26 @@
             "description" : "The issuer provider."
           },
           "credentials" : {
-            "$ref" : "#/components/schemas/IssuerCredentials"
+            "type" : "object",
+            "description" : "The credentials to be used for the issuer.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerCredentials"
+            } ]
           },
           "org_details" : {
-            "$ref" : "#/components/schemas/OrganizationDetails"
+            "type" : "object",
+            "description" : "Details of the organization as provided to the issuer.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/OrganizationDetails"
+            } ],
+            "x-ms-client-name" : "OrganizationDetails"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/IssuerAttributes"
+            "type" : "object",
+            "description" : "Attributes of the issuer object.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/IssuerAttributes"
+            } ]
           }
         },
         "description" : "The certificate issuer update parameters."
@@ -5550,6 +5764,7 @@
           },
           "value" : {
             "type" : "string",
+            "description" : "The result of the key operation, as a base64url-encoded value.",
             "format" : "base64url",
             "readOnly" : true,
             "x-ms-client-name" : "result"
@@ -5810,7 +6025,11 @@
             "readOnly" : true
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/StorageAccountAttributes"
+            "type" : "object",
+            "description" : "The storage account attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/StorageAccountAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -5824,27 +6043,29 @@
         "description" : "A Storage account bundle consists of key vault storage account details plus its attributes."
       },
       "DeletedStorageBundle" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted storage account."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the storage account is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the storage account was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "A deleted storage account bundle consisting of its previous id, attributes and its tags, as well as information on when it will be purged.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/StorageBundle"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted storage account."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the storage account is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the storage account was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "StorageAccountCreateParameters" : {
@@ -5868,7 +6089,12 @@
             "description" : "The key regeneration time duration specified in ISO-8601 format."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/StorageAccountAttributes"
+            "type" : "object",
+            "description" : "The attributes of the storage account.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/StorageAccountAttributes"
+            } ],
+            "x-ms-client-name" : "StorageAccountAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5896,7 +6122,12 @@
             "description" : "The key regeneration time duration specified in ISO-8601 format."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/StorageAccountAttributes"
+            "type" : "object",
+            "description" : "The attributes of the storage account.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/StorageAccountAttributes"
+            } ],
+            "x-ms-client-name" : "StorageAccountAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -5933,7 +6164,11 @@
             "readOnly" : true
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/StorageAccountAttributes"
+            "type" : "object",
+            "description" : "The storage account management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/StorageAccountAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -5947,27 +6182,29 @@
         "description" : "The storage account item containing storage account metadata."
       },
       "DeletedStorageAccountItem" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted storage account."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the storage account is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the storage account was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "The deleted storage account item containing metadata about the deleted storage account.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/StorageAccountItem"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted storage account."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the storage account is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the storage account was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "StorageListResult" : {
@@ -6076,7 +6313,11 @@
             "readOnly" : true
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            "type" : "object",
+            "description" : "The SAS definition attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -6090,27 +6331,29 @@
         "description" : "A SAS definition bundle consists of key vault SAS definition details plus its attributes."
       },
       "DeletedSasDefinitionBundle" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted SAS definition."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the SAS definition is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the SAS definition was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "A deleted SAS definition bundle consisting of its previous id, attributes and its tags, as well as information on when it will be purged.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/SasDefinitionBundle"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted SAS definition."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the SAS definition is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the SAS definition was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "SasDefinitionItem" : {
@@ -6128,7 +6371,11 @@
             "x-ms-client-name" : "SecretId"
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            "type" : "object",
+            "description" : "The SAS definition management attributes.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            } ]
           },
           "tags" : {
             "type" : "object",
@@ -6142,27 +6389,29 @@
         "description" : "The SAS definition item containing storage SAS definition metadata."
       },
       "DeletedSasDefinitionItem" : {
-        "properties" : {
-          "recoveryId" : {
-            "type" : "string",
-            "description" : "The url of the recovery object, used to identify and recover the deleted SAS definition."
-          },
-          "scheduledPurgeDate" : {
-            "type" : "integer",
-            "description" : "The time when the SAS definition is scheduled to be purged, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          },
-          "deletedDate" : {
-            "type" : "integer",
-            "description" : "The time when the SAS definition was deleted, in UTC",
-            "format" : "unixtime",
-            "readOnly" : true
-          }
-        },
         "description" : "The deleted SAS definition item containing metadata about the deleted SAS definition.",
         "allOf" : [ {
           "$ref" : "#/components/schemas/SasDefinitionItem"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "recoveryId" : {
+              "type" : "string",
+              "description" : "The url of the recovery object, used to identify and recover the deleted SAS definition."
+            },
+            "scheduledPurgeDate" : {
+              "type" : "integer",
+              "description" : "The time when the SAS definition is scheduled to be purged, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            },
+            "deletedDate" : {
+              "type" : "integer",
+              "description" : "The time when the SAS definition was deleted, in UTC",
+              "format" : "unixtime",
+              "readOnly" : true
+            }
+          }
         } ]
       },
       "SasDefinitionListResult" : {
@@ -6225,7 +6474,12 @@
             "description" : "The validity period of SAS tokens created according to the SAS definition."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            "type" : "object",
+            "description" : "The attributes of the SAS definition.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            } ],
+            "x-ms-client-name" : "SasDefinitionAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -6258,7 +6512,12 @@
             "description" : "The validity period of SAS tokens created according to the SAS definition."
           },
           "attributes" : {
-            "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            "type" : "object",
+            "description" : "The attributes of the SAS definition.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/SasDefinitionAttributes"
+            } ],
+            "x-ms-client-name" : "SasDefinitionAttributes"
           },
           "tags" : {
             "type" : "object",
@@ -6274,7 +6533,11 @@
         "type" : "object",
         "properties" : {
           "error" : {
-            "$ref" : "#/components/schemas/Error"
+            "type" : "object",
+            "description" : "The Key Vault server error.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/Error"
+            } ]
           }
         },
         "description" : "The key vault error exception."
@@ -6293,7 +6556,12 @@
             "readOnly" : true
           },
           "innererror" : {
-            "$ref" : "#/components/schemas/Error"
+            "type" : "object",
+            "description" : "The inner error, containing a more specific error code, if any.",
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/Error"
+            } ],
+            "x-ms-client-name" : "innerError"
           }
         },
         "description" : "The key vault server error."

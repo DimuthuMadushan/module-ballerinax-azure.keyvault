@@ -19,7 +19,7 @@ These changes are done in order to improve the overall usability, and as workaro
 
    **Reason**: Every Key Vault data-plane call needs a Microsoft Entra ID bearer token. With the scheme in place, the generated `ConnectionConfig` carries `http:BearerTokenConfig auth`.
 
-2. **Moved `properties` declared beside `allOf` into the `allOf`** (applied to `docs/spec/aligned_ballerina_openapi.json`)
+2. **Moved `properties` declared beside `allOf` into the `allOf`** (applied to `docs/spec/openapi.json`, under `definitions`, before flatten and align)
 
    **Location**: `components.schemas` — `DeletedKeyBundle`, `DeletedKeyItem`, `DeletedSecretBundle`, `DeletedSecretItem`, `DeletedCertificateBundle`, `DeletedCertificateItem`, `DeletedStorageBundle`, `DeletedStorageAccountItem`, `DeletedSasDefinitionBundle`, `DeletedSasDefinitionItem`, `KeyAttributes`, `SecretAttributes`, `CertificateAttributes`
 
@@ -29,17 +29,17 @@ These changes are done in order to improve the overall usability, and as workaro
 
    **Reason**: The Ballerina OpenAPI tool ignores `properties` placed beside `allOf`. Each of these types was generated as a bare alias of its base type (for example `DeletedKeyBundle` as `KeyBundle`, `KeyAttributes` as `Attributes`), silently dropping `recoveryId`, `scheduledPurgeDate`, `deletedDate` and `recoveryLevel`.
 
-3. **Kept the descriptions of `$ref` properties** (applied to `docs/spec/aligned_ballerina_openapi.json`)
+3. **Kept the descriptions of `$ref` properties** (applied to `docs/spec/openapi.json`, under `definitions`, before flatten and align)
 
-   **Location**: 44 properties across `components.schemas` that are a bare `$ref`, for example `KeyBundle.attributes`, `KeyBundle.key`, `CertificateBundle.policy`, `IssuerBundle.credentials` and `LifetimeAction.trigger`
+   **Location**: 50 properties across `components.schemas` that are a bare `$ref`, for example `KeyBundle.attributes`, `KeyBundle.key`, `CertificateBundle.policy`, `IssuerBundle.credentials` and `LifetimeAction.trigger`
 
    **Original**: `{"$ref": "..."}`. The description written beside the `$ref` in the source document is dropped by flatten and align, because OpenAPI 3.0 ignores keys that sit beside `$ref`.
 
-   **Updated**: `{"allOf": [{"$ref": "..."}], "description": "..."}`. 40 descriptions are restored verbatim from the source document. The other four had no source description and were written by hand: `KeyCreateParameters.attributes`, `KeyUpdateParameters.attributes`, `KeyVaultError.error` and `Error.innererror`.
+   **Updated**: `{"allOf": [{"$ref": "..."}], "description": "..."}`. 46 descriptions are restored verbatim from the source document. The other four had no source description and were written by hand: `KeyCreateParameters.attributes`, `KeyUpdateParameters.attributes`, `KeyVaultError.error` and `Error.innererror`.
 
    **Reason**: Without it, the generated record fields have no documentation.
 
-4. **Added descriptions to undocumented fields** (applied to `docs/spec/aligned_ballerina_openapi.json`)
+4. **Added descriptions to undocumented fields** (applied to `docs/spec/openapi.json`, before flatten and align)
 
    **Location**: `KeyOperationResult.value`, `KeyOperationsParameters.value`, `KeySignParameters.value`, `JsonWebKey.key_ops`, `KeyCreateParameters.key_ops`, `Contact.name`, `AdministratorDetails.last_name`
 
@@ -49,7 +49,7 @@ These changes are done in order to improve the overall usability, and as workaro
 
    **Reason**: Improves the generated API documentation.
 
-5. **Added summaries to the managed storage-account operations** (applied to `docs/spec/aligned_ballerina_openapi.json`)
+5. **Added summaries to the managed storage-account operations** (applied to `docs/spec/openapi.json`, before flatten and align)
 
    **Location**: `GET /storage`, `GET|PUT|PATCH|DELETE /storage/{storageAccountName}`, `POST /storage/{storageAccountName}/regeneratekey`, `GET /storage/{storageAccountName}/sas`, `GET|PUT|PATCH|DELETE /storage/{storageAccountName}/sas/{sasDefinitionName}`
 

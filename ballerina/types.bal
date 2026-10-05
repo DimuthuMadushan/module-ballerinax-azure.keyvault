@@ -40,22 +40,22 @@ public type PurgeDeletedStorageAccountQueries record {
 
 # Management policy for a certificate
 public type CertificatePolicy record {
-    # Properties of the X509 component of a certificate.
+    # Properties of the X509 component of a certificate
     @jsondata:Name {value: "x509_props"}
     X509CertificateProperties x509Props?;
-    # The certificate attributes.
+    # The certificate attributes
     CertificateAttributes attributes?;
     # The certificate id
     string id?;
-    # Properties of the secret backing a certificate.
+    # Properties of the secret backing a certificate
     @jsondata:Name {value: "secret_props"}
     SecretProperties secretProps?;
     # Actions that will be performed by Key Vault over the lifetime of a certificate
     @jsondata:Name {value: "lifetime_actions"}
     LifetimeAction[] lifetimeActions?;
-    # Parameters for the issuer of the X509 component of a certificate.
+    # Parameters for the issuer of the X509 component of a certificate
     IssuerParameters issuer?;
-    # Properties of the key backing a certificate.
+    # Properties of the key backing a certificate
     @jsondata:Name {value: "key_props"}
     KeyProperties keyProps?;
 };
@@ -122,7 +122,7 @@ public type SasDefinitionBundle record {
     string validityPeriod?;
     # The SAS definition token template signed with an arbitrary key.  Tokens created according to the SAS definition will have the same properties as the template
     string templateUri?;
-    # The SAS definition attributes.
+    # The SAS definition attributes
     SasDefinitionAttributes attributes?;
     # The SAS definition id
     string id?;
@@ -138,7 +138,7 @@ public type StorageAccountUpdateParameters record {
     string activeKeyName?;
     # The key regeneration time duration specified in ISO-8601 format
     string regenerationPeriod?;
-    # The attributes of the storage account.
+    # The attributes of the storage account
     StorageAccountAttributes attributes?;
     # whether keyvault should manage the storage account for the user
     boolean autoRegenerateKey?;
@@ -164,7 +164,7 @@ public type StorageAccountCreateParameters record {
     string resourceId;
     # The key regeneration time duration specified in ISO-8601 format
     string regenerationPeriod?;
-    # The attributes of the storage account.
+    # The attributes of the storage account
     StorageAccountAttributes attributes?;
     # whether keyvault should manage the storage account for the user
     boolean autoRegenerateKey;
@@ -232,7 +232,7 @@ public type DecryptQueries record {
 
 # The secret set parameters
 public type SecretSetParameters record {
-    # The secret management attributes.
+    # The secret management attributes
     SecretAttributes attributes?;
     # The value of the secret
     string value;
@@ -251,9 +251,9 @@ public type UpdateCertificateOperationQueries record {
 
 # The certificate create parameters
 public type CertificateCreateParameters record {
-    # The attributes of the certificate (optional).
+    # The attributes of the certificate (optional)
     CertificateAttributes attributes?;
-    # The management policy for the certificate.
+    # The management policy for the certificate
     CertificatePolicy policy?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -268,7 +268,7 @@ public type CertificateBundle record {
     string x5t?;
     # The key id
     string kid?;
-    # The certificate attributes.
+    # The certificate attributes
     CertificateAttributes attributes?;
     # The certificate id
     string id?;
@@ -276,7 +276,7 @@ public type CertificateBundle record {
     string contentType?;
     # The secret id
     string sid?;
-    # The management policy.
+    # The management policy
     CertificatePolicy policy?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -323,7 +323,7 @@ public type JsonWebKey record {
     "EC"|"EC-HSM"|"RSA"|"RSA-HSM"|"oct" kty?;
     # RSA secret prime, with p < q
     string q?;
-    # Supported key operations.
+    # Supported key operations
     @jsondata:Name {value: "key_ops"}
     string[] keyOps?;
     # RSA private key parameter
@@ -372,7 +372,7 @@ public type StorageRestoreParameters record {
 public type KeyOperationsParameters record {
     # algorithm identifier
     "RSA-OAEP"|"RSA-OAEP-256"|"RSA1_5" alg;
-    # The data to be encrypted, decrypted, wrapped or unwrapped, as a base64url-encoded value.
+    # The data to be encrypted, decrypted, wrapped or unwrapped, as a base64url-encoded value
     string value;
 };
 
@@ -398,7 +398,7 @@ public type SasDefinitionUpdateParameters record {
     string validityPeriod?;
     # The SAS definition token template signed with an arbitrary key.  Tokens created according to the SAS definition will have the same properties as the template
     string templateUri?;
-    # The attributes of the SAS definition.
+    # The attributes of the SAS definition
     SasDefinitionAttributes attributes?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -423,7 +423,7 @@ public type BackupKeyQueries record {
 public type KeySignParameters record {
     # The signing/verification algorithm identifier. For more information on possible algorithm types, see JsonWebKeySignatureAlgorithm
     "PS256"|"PS384"|"PS512"|"RS256"|"RS384"|"RS512"|"RSNULL"|"ES256"|"ES384"|"ES512"|"ES256K" alg;
-    # The digest to be signed, as a base64url-encoded value.
+    # The digest to be signed, as a base64url-encoded value
     string value;
 };
 
@@ -453,12 +453,12 @@ public type UpdateCertificatePolicyQueries record {
 # A DeletedKeyBundle consisting of a WebKey plus its Attributes and deletion info
 public type DeletedKeyBundle record {
     *KeyBundle;
-    # The url of the recovery object, used to identify and recover the deleted key.
+    # The time when the key was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted key
     string recoveryId?;
     # The time when the key is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the key was deleted, in UTC
-    int deletedDate?;
 };
 
 # The storage account key regenerate parameters
@@ -470,23 +470,23 @@ public type StorageAccountRegenerateKeyParameters record {
 # The deleted SAS definition item containing metadata about the deleted SAS definition
 public type DeletedSasDefinitionItem record {
     *SasDefinitionItem;
-    # The url of the recovery object, used to identify and recover the deleted SAS definition.
+    # The time when the SAS definition was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted SAS definition
     string recoveryId?;
     # The time when the SAS definition is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the SAS definition was deleted, in UTC
-    int deletedDate?;
 };
 
 # The deleted certificate item containing metadata about the deleted certificate
 public type DeletedCertificateItem record {
     *CertificateItem;
-    # The url of the recovery object, used to identify and recover the deleted certificate.
+    # The time when the certificate was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted certificate
     string recoveryId?;
     # The time when the certificate is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the certificate was deleted, in UTC
-    int deletedDate?;
 };
 
 # Represents the Queries record for the operation: updateStorageAccount
@@ -499,12 +499,12 @@ public type UpdateStorageAccountQueries record {
 # The deleted key item containing the deleted key metadata and information about deletion
 public type DeletedKeyItem record {
     *KeyItem;
-    # The url of the recovery object, used to identify and recover the deleted key.
+    # The time when the key was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted key
     string recoveryId?;
     # The time when the key is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the key was deleted, in UTC
-    int deletedDate?;
 };
 
 # Represents the Queries record for the operation: listSecretVersions
@@ -519,28 +519,28 @@ public type ListSecretVersionsQueries record {
 
 # Action and its trigger that will be performed by Key Vault over the lifetime of a certificate
 public type LifetimeAction record {
-    # The action that will be executed.
+    # The action that will be executed
     Action action?;
-    # The condition that will execute the action.
+    # The condition that will execute the action
     Trigger trigger?;
 };
 
 # A Deleted Certificate consisting of its previous id, attributes and its tags, as well as information on when it will be purged
 public type DeletedCertificateBundle record {
     *CertificateBundle;
-    # The url of the recovery object, used to identify and recover the deleted certificate.
+    # The time when the certificate was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted certificate
     string recoveryId?;
     # The time when the certificate is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the certificate was deleted, in UTC
-    int deletedDate?;
 };
 
 # The secret item containing secret metadata
 public type SecretItem record {
     # True if the secret's lifetime is managed by key vault. If this is a key backing a certificate, then managed will be true
     boolean managed?;
-    # The secret management attributes.
+    # The secret management attributes
     SecretAttributes attributes?;
     # Secret identifier
     string id?;
@@ -568,7 +568,7 @@ public type KeyImportParameters record {
     # Whether to import as a hardware key (HSM) or software key
     @jsondata:Name {value: "Hsm"}
     boolean hsm?;
-    # The key management attributes.
+    # The key management attributes
     KeyAttributes attributes?;
     # The Json web key
     JsonWebKey 'key;
@@ -580,12 +580,12 @@ public type KeyImportParameters record {
 public type CertificateIssuerUpdateParameters record {
     # The issuer provider
     string provider?;
-    # The credentials to be used for the issuer.
+    # The credentials to be used for the issuer
     IssuerCredentials credentials?;
-    # Details of the organization as provided to the issuer.
+    # Details of the organization as provided to the issuer
     @jsondata:Name {value: "org_details"}
     OrganizationDetails orgDetails?;
-    # Attributes of the issuer object.
+    # Attributes of the issuer object
     IssuerAttributes attributes?;
 };
 
@@ -599,7 +599,7 @@ public type X509CertificateProperties record {
     int:Signed32 validityMonths?;
     # The subject name. Should be a valid X509 distinguished Name
     string subject?;
-    # The subject alternative names.
+    # The subject alternative names
     SubjectAlternativeNames sans?;
     # The enhanced key usage
     string[] ekus?;
@@ -614,9 +614,9 @@ public type RecoverDeletedCertificateQueries record {
 
 # The certificate update parameters
 public type CertificateUpdateParameters record {
-    # The attributes of the certificate (optional).
+    # The attributes of the certificate (optional)
     CertificateAttributes attributes?;
-    # The management policy for the certificate.
+    # The management policy for the certificate
     CertificatePolicy policy?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -643,7 +643,7 @@ public type SecretBundle record {
     boolean managed?;
     # If this is a secret backing a KV certificate, then this field specifies the corresponding key backing the KV certificate
     string kid?;
-    # The secret management attributes.
+    # The secret management attributes
     SecretAttributes attributes?;
     # The secret id
     string id?;
@@ -666,9 +666,9 @@ public type UnwrapKeyQueries record {
 public type KeyBundle record {
     # True if the key's lifetime is managed by key vault. If this is a key backing a certificate, then managed will be true
     boolean managed?;
-    # The key management attributes.
+    # The key management attributes
     KeyAttributes attributes?;
-    # The Json web key.
+    # The Json web key
     JsonWebKey 'key?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -719,7 +719,7 @@ public type ListCertificateVersionsQueries record {
 # The attributes of a key managed by the key vault service
 public type KeyAttributes record {
     *Attributes;
-    # Reflects the deletion recovery level currently in effect for keys in the current vault. If it contains 'Purgeable' the key can be permanently deleted by a privileged user; otherwise, only the system can purge the key, at the end of the retention interval.
+    # Reflects the deletion recovery level currently in effect for keys in the current vault. If it contains 'Purgeable' the key can be permanently deleted by a privileged user; otherwise, only the system can purge the key, at the end of the retention interval
     "Purgeable"|"Recoverable+Purgeable"|"Recoverable"|"Recoverable+ProtectedSubscription" recoveryLevel?;
 };
 
@@ -746,7 +746,7 @@ public type IssuerParameters record {
 public type CertificateMergeParameters record {
     # The certificate or the certificate chain to merge
     CertificateMergeParametersX5cItemsString[] x5c;
-    # The attributes of the certificate (optional).
+    # The attributes of the certificate (optional)
     CertificateAttributes attributes?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -776,7 +776,7 @@ public type KeyItem record {
     boolean managed?;
     # Key identifier
     string kid?;
-    # The key management attributes.
+    # The key management attributes
     KeyAttributes attributes?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -785,12 +785,12 @@ public type KeyItem record {
 # The deleted secret item containing metadata about the deleted secret
 public type DeletedSecretItem record {
     *SecretItem;
-    # The url of the recovery object, used to identify and recover the deleted secret.
+    # The time when the secret was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted secret
     string recoveryId?;
     # The time when the secret is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the secret was deleted, in UTC
-    int deletedDate?;
 };
 
 # A certificate operation is returned in case of asynchronous requests
@@ -803,7 +803,7 @@ public type CertificateOperation record {
     boolean cancellationRequested?;
     # The certificate id
     string id?;
-    # Error encountered, if any, during the certificate operation.
+    # Error encountered, if any, during the certificate operation
     Error 'error?;
     # The status details of the certificate operation
     @jsondata:Name {value: "status_details"}
@@ -811,7 +811,7 @@ public type CertificateOperation record {
     # Identifier for the certificate operation
     @jsondata:Name {value: "request_id"}
     string requestId?;
-    # Parameters for the issuer of the X509 component of a certificate.
+    # Parameters for the issuer of the X509 component of a certificate
     IssuerParameters issuer?;
     # Status of the certificate operation
     string status?;
@@ -988,13 +988,13 @@ public type IssuerAttributes record {
 
 # The certificate import parameters
 public type CertificateImportParameters record {
-    # The attributes of the certificate (optional).
+    # The attributes of the certificate (optional)
     CertificateAttributes attributes?;
     # If the private key in base64EncodedCertificate is encrypted, the password used for encryption
     string pwd?;
     # Base64 encoded representation of the certificate object to import. This certificate needs to contain the private key
     string value;
-    # The management policy for the certificate.
+    # The management policy for the certificate
     CertificatePolicy policy?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -1024,7 +1024,7 @@ public type SecretRestoreParameters record {
 public type StorageAccountItem record {
     # Storage account resource Id
     string resourceId?;
-    # The storage account management attributes.
+    # The storage account management attributes
     StorageAccountAttributes attributes?;
     # Storage identifier
     string id?;
@@ -1102,7 +1102,7 @@ public type BackupStorageResult record {
 public type KeyOperationResult record {
     # Key identifier
     string kid?;
-    # The result of the key operation, as a base64url-encoded value.
+    # The result of the key operation, as a base64url-encoded value
     string value?;
 };
 
@@ -1111,7 +1111,7 @@ public type KeyUpdateParameters record {
     # Json web key operations. For more information on possible key operations, see JsonWebKeyOperation
     @jsondata:Name {value: "key_ops"}
     ("encrypt"|"decrypt"|"sign"|"verify"|"wrapKey"|"unwrapKey")[] keyOps?;
-    # The attributes of the key to update.
+    # The attributes of the key to update
     KeyAttributes attributes?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -1120,12 +1120,12 @@ public type KeyUpdateParameters record {
 # A Deleted Secret consisting of its previous id, attributes and its tags, as well as information on when it will be purged
 public type DeletedSecretBundle record {
     *SecretBundle;
-    # The url of the recovery object, used to identify and recover the deleted secret.
+    # The time when the secret was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted secret
     string recoveryId?;
     # The time when the secret is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the secret was deleted, in UTC
-    int deletedDate?;
 };
 
 # Represents the Queries record for the operation: listKeyVersions
@@ -1198,12 +1198,12 @@ public type ListDeletedStorageAccountsQueries record {
 # A deleted SAS definition bundle consisting of its previous id, attributes and its tags, as well as information on when it will be purged
 public type DeletedSasDefinitionBundle record {
     *SasDefinitionBundle;
-    # The url of the recovery object, used to identify and recover the deleted SAS definition.
+    # The time when the SAS definition was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted SAS definition
     string recoveryId?;
     # The time when the SAS definition is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the SAS definition was deleted, in UTC
-    int deletedDate?;
 };
 
 # Represents the Queries record for the operation: createKey
@@ -1287,7 +1287,7 @@ public type StorageBundle record {
     string resourceId?;
     # The key regeneration time duration specified in ISO-8601 format
     string regenerationPeriod?;
-    # The storage account attributes.
+    # The storage account attributes
     StorageAccountAttributes attributes?;
     # The storage account id
     string id?;
@@ -1305,7 +1305,7 @@ public type SasDefinitionCreateParameters record {
     string validityPeriod;
     # The SAS definition token template signed with an arbitrary key.  Tokens created according to the SAS definition will have the same properties as the template
     string templateUri;
-    # The attributes of the SAS definition.
+    # The attributes of the SAS definition
     SasDefinitionAttributes attributes?;
     # Application specific metadata in the form of key-value pairs
     record {|string...;|} tags?;
@@ -1320,7 +1320,7 @@ public type CreateCertificateQueries record {
 
 # The secret update parameters
 public type SecretUpdateParameters record {
-    # The secret management attributes.
+    # The secret management attributes
     SecretAttributes attributes?;
     # Type of the secret value such as a password
     string contentType?;
@@ -1334,10 +1334,10 @@ public type KeyCreateParameters record {
     "EC"|"EC-HSM"|"RSA"|"RSA-HSM"|"oct" kty;
     # Elliptic curve name. For valid values, see JsonWebKeyCurveName
     "P-256"|"P-384"|"P-521"|"P-256K" crv?;
-    # JSON web key operations permitted on the key.
+    # JSON web key operations permitted on the key
     @jsondata:Name {value: "key_ops"}
     ("encrypt"|"decrypt"|"sign"|"verify"|"wrapKey"|"unwrapKey")[] keyOps?;
-    # The attributes of the key to create.
+    # The attributes of the key to create
     KeyAttributes attributes?;
     # The key size in bits. For example: 2048, 3072, or 4096 for RSA
     @jsondata:Name {value: "key_size"}
@@ -1357,12 +1357,12 @@ public type SasDefinitionListResult record {
 # The deleted storage account item containing metadata about the deleted storage account
 public type DeletedStorageAccountItem record {
     *StorageAccountItem;
-    # The url of the recovery object, used to identify and recover the deleted storage account.
+    # The time when the storage account was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted storage account
     string recoveryId?;
     # The time when the storage account is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the storage account was deleted, in UTC
-    int deletedDate?;
 };
 
 # Represents the Queries record for the operation: updateSecret
@@ -1406,7 +1406,7 @@ public type ImportCertificateQueries record {
 
 # The SAS definition item containing storage SAS definition metadata
 public type SasDefinitionItem record {
-    # The SAS definition management attributes.
+    # The SAS definition management attributes
     SasDefinitionAttributes attributes?;
     # The storage SAS identifier
     string id?;
@@ -1442,7 +1442,7 @@ public type GetCertificateContactsQueries record {
 # The certificate management attributes
 public type CertificateAttributes record {
     *Attributes;
-    # Reflects the deletion recovery level currently in effect for certificates in the current vault. If it contains 'Purgeable', the certificate can be permanently deleted by a privileged user; otherwise, only the system can purge the certificate, at the end of the retention interval.
+    # Reflects the deletion recovery level currently in effect for certificates in the current vault. If it contains 'Purgeable', the certificate can be permanently deleted by a privileged user; otherwise, only the system can purge the certificate, at the end of the retention interval
     "Purgeable"|"Recoverable+Purgeable"|"Recoverable"|"Recoverable+ProtectedSubscription" recoveryLevel?;
 };
 
@@ -1465,7 +1465,7 @@ public type DeleteCertificateIssuerQueries record {
 public type Error record {
     # The error code
     string code?;
-    # The inner error, containing a more specific error code, if any.
+    # The inner error, containing a more specific error code, if any
     Error innererror?;
     # The error message
     string message?;
@@ -1475,12 +1475,12 @@ public type Error record {
 public type CertificateIssuerSetParameters record {
     # The issuer provider
     string provider;
-    # The credentials to be used for the issuer.
+    # The credentials to be used for the issuer
     IssuerCredentials credentials?;
-    # Details of the organization as provided to the issuer.
+    # Details of the organization as provided to the issuer
     @jsondata:Name {value: "org_details"}
     OrganizationDetails orgDetails?;
-    # Attributes of the issuer object.
+    # Attributes of the issuer object
     IssuerAttributes attributes?;
 };
 
@@ -1494,19 +1494,19 @@ public type CertificateOperationUpdateParameter record {
 # A deleted storage account bundle consisting of its previous id, attributes and its tags, as well as information on when it will be purged
 public type DeletedStorageBundle record {
     *StorageBundle;
-    # The url of the recovery object, used to identify and recover the deleted storage account.
+    # The time when the storage account was deleted, in UTC
+    int deletedDate?;
+    # The url of the recovery object, used to identify and recover the deleted storage account
     string recoveryId?;
     # The time when the storage account is scheduled to be purged, in UTC
     int scheduledPurgeDate?;
-    # The time when the storage account was deleted, in UTC
-    int deletedDate?;
 };
 
 # The contact information for the vault certificates
 public type Contact record {
     # Phone number
     string phone?;
-    # Name of the contact.
+    # Name of the contact
     string name?;
     # Email address
     string email?;
@@ -1516,12 +1516,12 @@ public type Contact record {
 public type IssuerBundle record {
     # The issuer provider
     string provider?;
-    # The credentials to be used for the issuer.
+    # The credentials to be used for the issuer
     IssuerCredentials credentials?;
-    # Details of the organization as provided to the issuer.
+    # Details of the organization as provided to the issuer
     @jsondata:Name {value: "org_details"}
     OrganizationDetails orgDetails?;
-    # Attributes of the issuer object.
+    # Attributes of the issuer object
     IssuerAttributes attributes?;
     # Identifier for the issuer object
     string id?;
@@ -1555,7 +1555,7 @@ public type ListDeletedSecretsQueries record {
 public type CertificateItem record {
     # Thumbprint of the certificate
     string x5t?;
-    # The certificate management attributes.
+    # The certificate management attributes
     CertificateAttributes attributes?;
     # Certificate identifier
     string id?;
@@ -1566,7 +1566,7 @@ public type CertificateItem record {
 # The secret management attributes
 public type SecretAttributes record {
     *Attributes;
-    # Reflects the deletion recovery level currently in effect for secrets in the current vault. If it contains 'Purgeable', the secret can be permanently deleted by a privileged user; otherwise, only the system can purge the secret, at the end of the retention interval.
+    # Reflects the deletion recovery level currently in effect for secrets in the current vault. If it contains 'Purgeable', the secret can be permanently deleted by a privileged user; otherwise, only the system can purge the secret, at the end of the retention interval
     "Purgeable"|"Recoverable+Purgeable"|"Recoverable"|"Recoverable+ProtectedSubscription" recoveryLevel?;
 };
 
@@ -1607,7 +1607,7 @@ public type BackupSecretQueries record {
 public type AdministratorDetails record {
     # Phone number
     string phone?;
-    # Last name of the administrator.
+    # Last name of the administrator
     @jsondata:Name {value: "last_name"}
     string lastName?;
     # First name
