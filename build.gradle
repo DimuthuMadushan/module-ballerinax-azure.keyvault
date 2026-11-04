@@ -57,8 +57,14 @@ allprojects {
 
 def moduleVersion = project.version.replace("-SNAPSHOT", "")
 
-task build {
-    dependsOn(':azure.keyvault-ballerina:build')
+if (tasks.names.contains('build')) {
+    tasks.named('build') {
+        dependsOn(':azure.keyvault-ballerina:build')
+    }
+} else {
+    tasks.register('build') {
+        dependsOn(':azure.keyvault-ballerina:build')
+    }
 }
 
 release {
