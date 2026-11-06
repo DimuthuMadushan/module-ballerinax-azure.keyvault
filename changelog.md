@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The connector can authenticate with an OAuth 2.0 refresh token or client credentials through Microsoft Entra ID,
+  as well as a bearer token, and renews access tokens itself. `ConnectionConfig.auth` accepts
+  `OAuth2RefreshTokenGrantConfig` and `OAuth2ClientCredentialsGrantConfig`.
 - A `*Queries` record for each operation, such as `SetSecretQueries` and `ListSecretsQueries`,
   which carries the operation's query parameters, including the required `apiVersion`.
 - An optional `headers` argument on every remote method, for sending extra request headers.
